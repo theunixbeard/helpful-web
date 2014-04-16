@@ -11,7 +11,7 @@ class AccountsController < ApplicationController
   def create
     user_params = params.require(:user).permit(:email, :password, :password_confirmation)
     account_params = params.require(:account).permit(:name)
-    person_params = params.require(:person).permit(:name)
+    person_params = params.require(:person).permit([:name, :username])
 
     @new_account_user = User.new user_params
     @account = Account.new account_params
@@ -64,10 +64,11 @@ class AccountsController < ApplicationController
 
   def find_account!
     @account = Account.find_by!(slug: params.fetch(:id))
+    authorize! AccountReadPolicy.new(@account, current_user)
   end
 
   def account_params
-    params.require(:account).permit(:name, :website_url, :webhook_url, :prefers_archiving)
+    params.require(:account).permit(:name, :website_url, :webhook_url, :prefers_archiving, :signature)
   end
 
 end

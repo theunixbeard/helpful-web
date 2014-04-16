@@ -5,6 +5,11 @@ describe AccountsController do
   let(:owner) { create(:user) }
   let(:account) { create(:account) }
 
+  before do
+    create(:membership, account: account, user: owner, role: 'owner')
+  end
+
+
   describe "GET #new" do
     it "is successful" do
       get :new
@@ -18,7 +23,8 @@ describe AccountsController do
         name: 'MyCompany'
       },
       person: {
-        name: 'John Doe'
+        name: 'John Doe',
+        username: 'john'
       },
       user: {
         email: 'user@user.com',
@@ -28,10 +34,12 @@ describe AccountsController do
     }
 
     assert_redirected_to inbox_account_conversations_path('mycompany')
+    expect(assigns(:person).username).to eq "john"
   end
 
   describe "GET #show" do
     it "redirects to the inbox" do
+      sign_in(owner)
       get :show, id: account.slug
       expect(response).to redirect_to(inbox_account_conversations_path(account))
     end

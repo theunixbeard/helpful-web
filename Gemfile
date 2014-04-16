@@ -17,6 +17,7 @@ gem 'carrierwave-aws'
 gem 'curb'
 gem 'devise', '~> 3.1'
 gem 'devise_invitable', '~> 1.3'
+gem 'devise-i18n'
 gem 'doorkeeper'
 gem 'elasticsearch-model'
 gem 'friendly_id', '~> 5.0'
@@ -60,6 +61,7 @@ group :development, :test do
 end
 
 group :test do
+  gem 'capybara'
   gem 'webmock', '< 1.16'
 end
 
